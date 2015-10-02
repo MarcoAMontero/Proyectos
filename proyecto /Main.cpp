@@ -1,12 +1,12 @@
 // Marco Antonio Montero Chavarría
 #include "Gaussian.hh"
-//#include "Comunicacion.hh"
+#include "Comunicacion.hh"
 #include <iostream>
 
 
 int main(void){
 Gaussian gau; 
-//Comunicacion com;
+Comunicacion com;
 //double temp;
 double mu = 2;
 double sigma = 0.2;
@@ -17,11 +17,11 @@ double sigma = 0.2;
 
 ///////////////////////////////////////////////////////////
 ////Transmisión de un mensaje//////////////////////////////
-/*
+
 com.send();
 com.deform_mensaje(mu,sigma);
 com.receive();
-*/
+
 
 
 
@@ -31,12 +31,12 @@ com.receive();
 	vector[i] = temp;		
 }
 */
-
+/*
 char mensaje[10] = "Hello";
 
 cout << mensaje[2] << endl;
 
-mensaje[2] = "z";
+mensaje[2] = 'Z';
 cout << mensaje[2] << endl;
-
+*/
 }

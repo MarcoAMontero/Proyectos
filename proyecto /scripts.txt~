@@ -2,5 +2,4 @@ comandos de compilacion
 
 g++ -Wall -c -pedantic Gaussian.cpp
 g++ -Wall -o main -pedantic Main.cpp Gaussian.o
-g++ -Wall -c -pedantic Comunicacion.cpp
 ./main
