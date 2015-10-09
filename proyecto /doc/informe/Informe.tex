@@ -1,0 +1,166 @@
+\documentclass[letterpaper]{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{babelbib}
+\usepackage[T1]{fontenc}
+\usepackage{color}
+\usepackage{framed}
+\usepackage{hyperref}
+\usepackage{mathtools}
+\usepackage{listings}
+\usepackage{newtxmath,newtxtext}
+\definecolor{red}{RGB}{219,0,0}
+\definecolor{pink}{RGB}{255,100,100}
+\definecolor{gray}{RGB}{100,100,100}
+\lstset{
+		basicstyle=\ttfamily,
+		frame=single,
+		keywordstyle=\color{red},
+		commentstyle=\color{gray},
+		stringstyle=\color{pink},
+		tabsize=3,
+		language=verilog,
+		backgroundcolor=\color{white}}
+
+\usepackage{fancyhdr} 
+\pagestyle{fancy}
+\usepackage{lastpage}
+\lhead{Propuesta Proyecto}
+\chead{}
+\rhead{Estructuras abstractas de datos y algoritmos}
+\lfoot{}
+\cfoot{}
+\rfoot{\footnotesize Page \thepage\ of \pageref{LastPage}}
+
+\renewcommand{\headrulewidth}{0.4pt} 
+\renewcommand{\footrulewidth}{0.4pt} 
+
+\graphicspath{{../media/}}	%%multimedia path
+\setlength{\parindent}{0pt}
+%%***********************************************************************
+\begin{document}
+
+\title{Proyecto Indiviual\\Estructuras de Datos abstractos y Algoritmos}
+\author{
+ Marco Antonio Montero Chavarría Carné: A94000\\
+}
+\maketitle
+
+\newpage
+
+\section*{Objetivo General}
+Crear un sistema de comunicación que tome en cuenta tipos de ruido.
+
+\section*{Objetivos específicos}
+\begin{itemize}
+\item Comprender la teoría relacionada a funciones de distribución probabilísticas.
+\item Comprender el uso de templates en C++.
+\item Crear un código capaz de generar suficientes puntos de acorde a una función de distribución elegida.
+\item Gráficar estas distribuciones
+\item Obtener un sistema de comunicación con un receptor, emisor y un canal.
+\end{itemize}
+
+\newpage
+
+\section{Justificación}
+ En investigación no siempre las variables con las que se debe trabajar son determinísticas, muchas veces se debe trabajar con variables y procesos aleatorios, también conocidos como procesos estocásticos. Por ende se debe buscar una manera óptima de modelar el comportamiento de estas varibles, para poder aplicar herramientas matemáticas conocidas.
+ Una manera eficiente es utilizando distribuciones probabilísticas para poder obtener un modelo matématico del comportamiento que se quiere entender, normalmente se deben realizar multiplés iteraciones y hacer comparaciones para ver cual de las distribuciones se asemeja más al comportamiento deseado.
+ Ejemplo de esto es el viento que no es posible modelarlo con modelos lineales, es decir se ocupa algo más, un modelo no lineal, ya que su movimiento es aleatorio. 
+ Por ende una aplicación como esta permitirá al lector una mejor comprensión de modelados probabilísticos.
+
+\newpage
+
+\section{Marco Teórico}
+ En la teoría de la probabilidad y estadística, una función de distribución de probabilidad describe la probabilidad de que una variable aleatoria real X (mayúscula) que esta sujeta a una ley de distribución de probabilidad específica se encuentre en la zona de valores menores o iguales a x(minúscula).
+ Es decir que a cada suceso definido sobre la variable aleatoria se le asigna la probabilidad de que dicho suceso ocurra. 
+
+ En lenguaje matématico esto se expresa de la siguiente forma:
+
+\begin{equation}
+ F(x) = P(X \leq x)
+\end{equation}
+
+ Existen dos grandes bloques de distribuciones, uno esta definido para varibles continuas y otro para variables discretas.
+
+Una distribución para varible discreta es de la forma:
+\begin{equation}
+ F(x) = P(X \leq x) = \sum_{k \to \infty}^x f(k)
+\end{equation}
+
+Una distribución para una variable continua tiene la siguiente forma:
+\begin{equation}
+ F(x) = P(X \leq x) = \int_\infty^x \!f(t)dt
+\end{equation}
+
+
+Para esta investigación se tomaron en cuenta 3 funciones de densidad de probabilidad continuas.\cite{Peyton}.
+
+\subsection{Funcion de distribución gaussiana}
+La función de distribución gaussiana o normal es la más utilizada, también es conocidad por su forma de campana, fue definida por Moivre y utilizada en muchos de sus estudios por Gauss. Posee la siguiente forma:
+\begin{equation}
+F(x) = \frac{1}{\sigma\sqrt{2\pi}}\int_\infty^t \!e^{-\frac{(t-\mu)^2}{2\sigma^2}} dt
+\end{equation}
+
+Con media $\mu$ y varianza $\sigma^2$. La media es valor medio de un fenómeno aleatorio, es la cantidad media que se espera de múltiples iteraciones como resultado de un experimento. La varianza es la desviación de la variable aleatorio con respecto a su media.\cite{Peyton}
+
+\subsection{Función de distribución rayleigh}
+
+\begin{equation}
+F(x) = 1 - e^\frac{-x^2}{2\sigma^2}
+\end{equation}
+
+Con media $E[X]= \sigma\sqrt{\frac{\pi}{2}}$
+
+Y varianza $E[X]^2 = \frac{4-\pi}{2}\sigma^2$
+
+Esta función se utiliza para modelar las variaciones en la velocidad del tiempo. \cite{H.Crammer}
+
+\subsection{Función de distribución uniforme}
+Se define como :
+\begin{equation}
+F(x) = \frac{x-a}{b-a}
+\end{equation}
+
+Esta función es 0 para x < a y 1 para $b\leq x$. La media $E[X]=\frac{a+b}{2}$ y varianza $E[X]^2=\frac{(b-a)^2}{12}$ 
+Se utiliza más que todo en la teoría para realizar ejemplos y comprender conceptos.\cite{Peyton}
+
+
+\section{Desarrollo}
+
+C++ posee templates de la biblioteca stl para generar números aleatorios según una distribucción deseada. Para este proyecto se decidió no usarlos y usando el algoritmo de box-muller se logró pasar de una distribución uniforme a una distribución gaussiana y a una rayleigh.\\
+
+El método box-muller con variación polar permite usar dos variables U1,U2 uniformemente distribuidas entre [-1,1] independientes, para crear dos variables aleatorias distribuidas de forma gaussiana, en forma estándar con $\mu=0$ y $\sigma=1$.\cite{Marsaglia}\\
+
+Según el método: $Z1 = U1 * \sqrt{\frac{-2 * \ln w}{w}}$ y $Z2 = U2 * \sqrt{\frac{-2 * \ln w}{w}}$ donde $w = U1*U1 +U2*U2$ a partir de esto se puede crear X como variable aleatoria distribuida normalmente con un $\sigma$ y un $\mu$ que se pueden variar.\cite{Marsaglia}\\
+$X = \sigma * Z + \mu$
+
+Y Z es igual a Z1 y Z2 según el método se debe alternar entre las dos para generar la campana de gauss completa.\\
+
+Además una variación de método box muller llamada método inverso permite generar una variable distribuida rayleigh tomando un U1 uniformemente distribuido entre [0,1] para generar X, donde X es igual al radio del circulo que genera el método original de box muller para crear la distribución gaussiana.\\
+
+Esta define $ R = \sigma * \sqrt{-2*\ln U}$ por lo tanto $X=R$ y obtengo la variable aleatoria distribuida rayleigh.\cite{Marsaglia}\\
+
+El lector se debe preguntar como se logra crear las distribuciones uniformes. Peculiarmente el método $rand()$ de la bibliteca de c++, genera distribuciones uniformes entre un rango [a,b] por lo tanto solo se requiere definirlo entre el rango deseado para crear U1 U2 y U para el método de rayleigh. \\
+\newpage
+Una vez implementados los métodos para generar variables aleatorios distribuidos rayleigh o gaussiana, se debe crear un sistema de comunicación con un receptor, un emisor y un canal o medio. Para este proyecto se eligió como medio el aire por lo tanto este posee ruido gaussiano y además para hacer el proyecto más interesantes se le añadio otro tipo de ruido el rayleigh que no es precisamente una implementación real es más solo una prueba.\\
+
+El canal se modeló con el template de pila que tiene la biblioteca stl y los métodos de enviar y recibir apilan y desapilan el mensaje enviado. El canal modifica lo que esta en esa pila según alguna de las dos funciones de distribución.\\
+
+Por último se añadió un pequeño código para dibujar la función de distribución definida para el canal, está es un simple histograma tipo bucket que generará un $*$ por cada vez que uno de los enteros que el vector bin tenga en un indice.\\
+
+\newpage 
+
+\section{Conclusión}
+
+El lector probablemente pensará en la utilidad del proyecto. Básicamente en el tiempo pre era de las comunicación inalámbricas, modelar el ruido en el aire era esencial para crear métodos de modulación y codificación eficientes. Un proyecto como este les permitiría hacer un análisis básicos y comprobar si sus protocólos funcionan o funcionaban de manera correcta y si la salidad en el receptor es la salida esperada. \\
+Por la parte de c++ el proyecto ayudo a mejorar el conocimiento del lenguaje y el uso de paradigmas de programación, además el uso de templates y preparar para un proyecto más denseo como la creación de una librería.
+
+
+\newpage
+\bibliographystyle{alpha}
+\bibliography{refs}
+
+
+\end{document}
